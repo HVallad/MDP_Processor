@@ -1,0 +1,50 @@
+﻿<UserControl x:Class="MDPProcessor.MVVM.View.RewardsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:MDPProcessor.MVVM.View"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="100"/>
+            <ColumnDefinition Width="100"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Padding="20" Text="{Binding RewardsFileName}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+        <Button Margin="5" Grid.Column="2" Content="Load..." Command="{Binding OnLoadRewardsCommand}"/>
+
+        <ListView Grid.Column="0" Grid.ColumnSpan="56" 
+                  Grid.Row="1" Grid.RowSpan="1"  
+                  ItemsSource="{Binding TableCollection}"
+                  >
+            <ListView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="Horizontal"></StackPanel>
+                </ItemsPanelTemplate>
+            </ListView.ItemsPanel>
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel>
+                        <Button Width="60" Height="25" Content="{Binding TableName}" Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.OnSwitchSheetCommand}" CommandParameter="{Binding TableName}"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+        <DataGrid Grid.Column="0" Grid.ColumnSpan="56" 
+                  Grid.Row="2" Grid.RowSpan="1" 
+                  ItemsSource="{Binding GridContext}" 
+                  CanUserSortColumns="False" CanUserAddRows="False" CanUserDeleteRows="False"
+                  CurrentCellChanged="DataGrid_CurrentCellChanged">
+
+        </DataGrid>
+    </Grid>
+</UserControl>

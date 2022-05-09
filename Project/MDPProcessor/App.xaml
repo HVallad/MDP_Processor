@@ -1,0 +1,35 @@
+﻿<Application x:Class="MDPProcessor.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:MDPProcessor"
+             xmlns:vm ="clr-namespace:MDPProcessor.MVVM.ViewModel"
+             xmlns:views="clr-namespace:MDPProcessor.MVVM.View"
+             StartupUri="MainWindow.xaml">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="./Themes/Button.xaml"/>
+                <ResourceDictionary Source="./Themes/Checkbox.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
+            <DataTemplate DataType="{x:Type vm:HomeViewModel}">
+                <views:HomeView/>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type vm:TransitionViewModel}">
+                <views:TransitionsView/>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type vm:RewardsViewModel}">
+                <views:RewardsView/>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type vm:PolicyViewModel}">
+                <views:PolicyView/>
+            </DataTemplate>
+
+
+
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

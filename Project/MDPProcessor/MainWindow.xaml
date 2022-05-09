@@ -1,0 +1,177 @@
+﻿<Window x:Class="MDPProcessor.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:icon="http://metro.mahapps.com/winfx/xaml/iconpacks"
+        xmlns:local="clr-namespace:MDPProcessor"
+        xmlns:VM="clr-namespace:MDPProcessor.MVVM.ViewModel"
+        xmlns:core="clr-namespace:MDPProcessor.Core"
+        mc:Ignorable="d"
+        
+        Title="MainWindow" 
+        Height="700" 
+        Width="1350"
+        MinWidth="800"
+        MinHeight="600"
+        WindowStyle="None"
+        ResizeMode="CanResize"
+        Background="Transparent"
+        AllowsTransparency="True"
+        WindowStartupLocation="CenterScreen">
+
+    <!--https://www.youtube.com/watch?v=N26C_Cq-gAY-->
+
+    <Window.DataContext>
+        <VM:MainViewModel/>
+    </Window.DataContext>
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="b2v"/>
+    </Window.Resources>
+    <Border Background="#ffffff"
+            BorderBrush="#093cbd"
+            BorderThickness="5"
+            CornerRadius="8,8,8,8"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch">
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+                <RowDefinition />
+                <RowDefinition Height="15"/>
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            
+            <!--Resizeable Window-->
+            <Thumb HorizontalAlignment="Right" Margin="-10" Width="10" Cursor="SizeWE" x:Name="h_Thumb_r" Grid.RowSpan="3" Grid.ColumnSpan="2" Opacity="0" DragDelta="H_thumb_DragDelta_Right"/>
+            <Thumb HorizontalAlignment="Left" Margin="-10" Width="10" Cursor="SizeWE" x:Name="h_Thumb_l" Grid.RowSpan="3" Grid.ColumnSpan="2" Opacity="0" DragDelta="H_thumb_DragDelta_Left"/>
+
+            <Thumb VerticalAlignment="Top" Margin="0,0,0,0" Cursor="SizeNS" x:Name="v_Thumb_t" Grid.RowSpan="3" Grid.Row="0" Grid.ColumnSpan="2" Opacity="1" DragDelta="V_thumb_DragDelta_Top"/>
+            <Thumb VerticalAlignment="Bottom" Margin="-20" Cursor="SizeNS" x:Name="v_Thumb_b" Grid.RowSpan="2" Grid.ColumnSpan="2" Opacity="0" DragDelta="V_thumb_DragDelta_Bottom"/>
+            
+            <!--Header-->
+            <Grid Background="#093cbd"
+                  Grid.ColumnSpan="2"
+                  MouseDown="Grid_MouseDown">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="125"/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="50"/>
+                    <ColumnDefinition Width="50"/>
+                    <ColumnDefinition Width="50"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Text="MDP Processor"
+                           Foreground="White"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"/>
+
+                <Button Grid.Column="7" Click="Button_MinimizeApp">
+                    <icon:PackIconFontAwesome Kind="WindowMinimizeRegular" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,10,0,0"/>
+                </Button>
+                <Button Grid.Column="8" Click="Button_MaximizeApp">
+                    <icon:PackIconFontAwesome x:Name="app_btn_maximize_icon" Kind="WindowMaximizeRegular" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,0,0"/>
+                </Button>
+                <Button Grid.Column="9" Click="Button_CloseApp">
+                    <icon:PackIconFontAwesome Kind="WindowCloseRegular" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,0,0"/>
+                </Button>
+
+            </Grid>
+            
+            <!--Body-->
+            <Grid Grid.Row="1" Grid.ColumnSpan="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="{Binding SideMenuWidth}"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                
+                <!--Sidemenu-->
+                <Grid Grid.Column="0" Background="#093cbd">
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    
+                    <Button Grid.Row="0" Command="{Binding OnToggleMenuCommand}">
+                        <StackPanel>
+                            <icon:PackIconFontAwesome Kind="{Binding SideMenuIcon}"  HorizontalAlignment="Center"/>
+                            <TextBlock Text="Hide" Foreground="White" TextAlignment="Center" Visibility="{Binding IsMenuOpen, Converter={StaticResource b2v}}"/>
+                        </StackPanel>
+                    </Button>
+
+                    <Button Grid.Row="1" Command="{Binding Navigator.UpdateCurrentViewModelCommand}" CommandParameter="{x:Static core:ViewType.Home}">
+                        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <icon:PackIconFontAwesome Kind="HomeSolid" HorizontalAlignment="Center"/>
+                            <TextBlock Text="Home" Foreground="White" TextAlignment="Center" Visibility="{Binding IsMenuOpen, Converter={StaticResource b2v}}"/>
+                        </StackPanel>
+                    </Button>
+
+                    <Button Grid.Row="2" Command="{Binding Navigator.UpdateCurrentViewModelCommand}" CommandParameter="{x:Static core:ViewType.Transition}">
+                        <StackPanel>
+                            <icon:PackIconFontAwesome Kind="RecycleSolid"  HorizontalAlignment="Center"/>
+                            <TextBlock Text="Transitions" Foreground="White" TextAlignment="Center" Visibility="{Binding IsMenuOpen, Converter={StaticResource b2v}}"/>
+                        </StackPanel>
+                    </Button>
+
+                    <Button Grid.Row="3" Command="{Binding Navigator.UpdateCurrentViewModelCommand}" CommandParameter="{x:Static core:ViewType.Reward}">
+                        <StackPanel>
+                            <icon:PackIconFontAwesome Kind="MedalSolid"  HorizontalAlignment="Center"/>
+                            <TextBlock Text="Rewards" Foreground="White" TextAlignment="Center" Visibility="{Binding IsMenuOpen, Converter={StaticResource b2v}}"/>
+                        </StackPanel>
+                    </Button>
+
+                    <Button Grid.Row="4" Command="{Binding Navigator.UpdateCurrentViewModelCommand}" CommandParameter="{x:Static core:ViewType.Policy}">
+                        <StackPanel>
+                            <icon:PackIconFontAwesome Kind="PollSolid"  HorizontalAlignment="Center"/>
+                            <TextBlock Text="Policy" Foreground="White" TextAlignment="Center" Visibility="{Binding IsMenuOpen, Converter={StaticResource b2v}}"/>
+                        </StackPanel>
+                    </Button>
+
+
+
+
+                </Grid>
+                
+                <!--Content-->
+                <ContentControl Grid.Column="1" Content="{Binding Navigator.CurrentViewModel}"/>
+
+            </Grid>
+
+            <!--Footer-->
+            <Grid Background="#093cbd"
+                  Grid.ColumnSpan="2"
+                  Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="120"/>
+                </Grid.ColumnDefinitions>
+                
+            </Grid>
+
+        </Grid>
+    </Border>
+</Window>
